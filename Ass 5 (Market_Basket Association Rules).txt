@@ -1,0 +1,44 @@
+!pip install mlxtend
+
+import pandas as pd
+import csv
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori,association_rules 
+
+dataset = []
+with open('Market_Basket_Optimisation.xls') as file:
+    reader = csv.reader(file,delimiter=',')
+    for row in reader:
+        dataset+=[row]
+
+dataset[0:10]
+
+len(dataset)
+
+#Transaction encoder makes a table of items bought as column names
+# and marks true for a person if he buys it 
+#helps in collecting all the unique items
+te = TransactionEncoder()
+x = te.fit_transform(dataset)
+
+x.shape
+
+#Making a pandas dataframe as datase
+df = pd.DataFrame(x,columns=te.columns_)
+df
+
+# 1. Find frequent itemset
+freq_itemset = apriori(df,min_support=0.01,use_colnames=True) # taking support as 10%
+
+freq_itemset
+
+# Find the rules
+rules = association_rules(freq_itemset,metric='confidence',
+min_threshold=0.30)
+rules
+
+rules = rules[['antecedents','consequents','support','confidence']]
+
+rules.head()
+
+rules[rules['antecedents']=={'cake'}]
