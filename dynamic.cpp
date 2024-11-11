@@ -8,16 +8,16 @@ int knapsack(int weights[], int values[], int n, int W) {
 
     // Initialize the dp array
     for (int i = 0; i <= n; i++) {
-        for (int w = 0; w <= W; w++) {
+        for (int j = 0; j <= W; j++) {
             // Base case: if no items or weight is 0, value is 0
-            if (i == 0 || w == 0)
-                dp[i][w] = 0;
-            else if (weights[i - 1] <= w) {
+            if (i == 0 || j == 0)
+                dp[i][j] = 0;
+            else if (weights[i - 1] <= j) {
                 // Include the item or exclude it, choose the maximum value
-                dp[i][w] = max(values[i - 1] + dp[i - 1][w - weights[i - 1]], dp[i - 1][w]);
+                dp[i][j] = max(values[i - 1] + dp[i - 1][j - weights[i - 1]], dp[i - 1][j]);
             } else {
                 // Exclude the item
-                dp[i][w] = dp[i - 1][w];
+                dp[i][j] = dp[i - 1][j];
             }
         }
     }
